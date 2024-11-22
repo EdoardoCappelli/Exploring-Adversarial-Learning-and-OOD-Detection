@@ -9,6 +9,8 @@ This repository contains code to set up an experiment that analyzes how a simple
   - Loading datasets (**CIFAR-10** and a fake dataset for OOD analysis).
   - Training the CNN model.
   - Saving the trained model.
+- `analize.py`: Main script for:
+  
   - Analyzing logits and comparing in-distribution vs. out-of-distribution results.
 
 ## Usage
