@@ -2,6 +2,9 @@
 
 This repository contains code to set up an experiment that analyzes how a simple Convolutional Neural Network (CNN), trained on the CIFAR-10 dataset, behaves when presented with Out-of-Distribution (OOD) samples.
 
+## Introduction
+While neural networks excel at classifying images within their training distribution, they often make high-confidence predictions even for unfamiliar or irrelevant images. This poses a critical problem for real-world applications where the test data distribution might differ from the training data.
+
 ## Project Structure
 
 - `model.py`: Contains the implementation of the CNN architecture.
