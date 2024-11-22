@@ -24,59 +24,28 @@ ODIN leverages the following components to improve OOD detection:
   - These perturbations have a stronger effect on in-distribution images than on OOD images, further improving separability.
 
 ---
-
-## **Implementation Steps**
-1. **Load a pre-trained model.**
-   ODIN works with existing models trained on in-distribution datasets (e.g., CIFAR-10, CIFAR-100).
-   
-2. **Adjust the softmax function:**
-   Use a modified softmax with a high temperature value.
-
-3. **Add input preprocessing:**
-   Introduce small perturbations to the input images using the gradient of the log-softmax score.
-
-4. **Compare softmax scores:**
-   Use the modified softmax scores to distinguish in-distribution from OOD images.
-
-
-## Evaluation
-ODIN has been evaluated on various benchmark datasets, showing significant improvements in OOD detection:
-
-### In-distribution datasets
-- CIFAR-10
-- CIFAR-100
-
-### OOD datasets
-- Gaussian Noise
-- CIFAR100 subset
-
-### Metrics
+ 
+## In- and Out-Of-Distribution datasets
+- ID
+  - CIFAR-10
+- OOD
+  - Gaussian Noise
+  - CIFAR100 subset (no CIFAR-10 classes)
+ 
+  
+### Metrics 
+The metrics used to evaluate how good a neural network is in distinguishing in- and out-of-distribution images are:
 - **FPR at 95% TPR:** Measures the false positive rate when true positive rate is 95%.
 - **AUROC:** Area Under the Receiver Operating Characteristic curve.
 
 ### Results
-- ODIN outperforms baseline methods across all tested configurations.
-- Parameters tuned on one OOD validation set transfer effectively to others.
-
-## **How to Run ODIN**
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/your-username/odin-ood-detector.git
-   ```
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Run the ODIN detection script:
-   ```bash
-   python odin_detector.py --model <model_path> --dataset <dataset_path> --temperature <value> --epsilon <value>
-   ```
-   Example:
-   ```bash
-   python odin_detector.py --model resnet.pth --dataset cifar10 --temperature 1000 --epsilon 0.002
-   ```
-
-
+ 
+## How to Run ODIN
+ 
+ ```bash
+ python odin_detector.py --model <model_path> --dataset <dataset_path> --temperature <value> --epsilon <value>
+ ```
+ 
 ## References
 **"Enhancing The Reliability of Out-of-Distribution Image Detection in Neural Networks"**  
 Authors: Shiyu Liang, Yixuan Li, and R. Srikant.  
