@@ -63,7 +63,8 @@ After 50 epochs:
   <img width="420" src="https://github.com/user-attachments/assets/f01f128d-920a-46a2-9e82-ea35735da249">
 </p>
 
-
+The logits distribution for the FakeData suggest that, as we expected, the model doesn't have high confidence in its prediction.
+On the contrary, the logits distribution for the ID data suggest that the model has greater confidence in its predictions. The long right tail suggests that for some classes, the model is very confident.
 
 ## Does the problem get worse if we test using *real* images as OOD samples?
 
