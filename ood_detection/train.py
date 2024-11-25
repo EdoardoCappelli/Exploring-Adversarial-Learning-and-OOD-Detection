@@ -1,40 +1,14 @@
-import torch
-import torchvision
-from torchvision.datasets import FakeData
-from torch.utils.data import Subset
-from torchvision import transforms
-import matplotlib.pyplot as plt
-import torch.nn.functional as F
-from torch import nn
-from torch import optim
-import numpy as np
-from tqdm import tqdm
-from sklearn.metrics import accuracy_score, classification_report
-from sklearn import metrics
-import random
-import gc
-import os
-from utils import evaluate_model, train_epoch
-from models.cnn import CNN 
 import argparse
 import torch
 import torchvision
 from torchvision.datasets import FakeData
 from torch.utils.data import Subset
 from torchvision import transforms
-import matplotlib.pyplot as plt
-import torch.nn.functional as F
 from torch import nn
 from torch import optim
-import numpy as np
-from tqdm import tqdm
-from sklearn.metrics import accuracy_score, classification_report
-from sklearn import metrics
-import random
-import gc
 import os
 from utils import evaluate_model, train_epoch
-
+from models.cnn import CNN 
   
 if __name__ == "__main__":
     # Argument parser
