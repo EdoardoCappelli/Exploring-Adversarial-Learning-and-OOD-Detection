@@ -6,13 +6,8 @@ from torchvision import transforms
 import matplotlib.pyplot as plt
 import torch.nn.functional as F
 from torch import nn
-from torch import optim
 import numpy as np
-from tqdm import tqdm
-from sklearn.metrics import accuracy_score, classification_report
 from sklearn import metrics
-import random
-import gc
 import argparse
 from utils import evaluate_model
 from models.cnn import CNN 
@@ -22,7 +17,7 @@ def max_logit(logit):
     s, _ = logit.max(dim=1) #get the max for each element of the batch
     return s
 
-# (A BASELINE FOR DETECTING MISCLASSIFIED AND OUT-OF-DISTRIBUTION EXAMPLES IN NEURAL NETWORKS, https://arxiv.org/pdf/1610.02136)
+# BASELINE: https://arxiv.org/pdf/1610.02136
 def max_softmax(logit, T=1.0):
     s = F.softmax(logit/T, 1)
     s, _ = s.max(dim=1) #get the max for each element of the batch
@@ -72,7 +67,6 @@ if __name__ == "__main__":
       fakeset = Subset(cifar100, selected_indices)
       fakeloader = torch.utils.data.DataLoader(fakeset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     
-    # Load pretrained model using args.pretrained 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = CNN().to(device)
     model.load_state_dict(torch.load(args.pretrained, weights_only=True))
