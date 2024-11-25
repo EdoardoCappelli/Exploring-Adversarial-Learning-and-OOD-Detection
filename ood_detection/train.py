@@ -9,7 +9,7 @@ from torch import optim
 import os
 from utils import evaluate_model, train_epoch
 from models.cnn import CNN 
-  
+
 if __name__ == "__main__":
     # Argument parser
     parser = argparse.ArgumentParser(description="Train a CNN on CIFAR10 with optional OOD dataset")
