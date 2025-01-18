@@ -38,15 +38,15 @@ In order to distinguish between IN data and OOD data I compute a OOD score using
 </p> 
 
 
-### Max Softmax Distribution
+### cnn_ep{10}
+| AUROC | 0.635 |
+| AUPR | 0.945 |
+
+### resnet_ep{10}
+| AUROC | 0.73 | 
+| AUPR | 0.96 | 
 
 
-### OOD Detection Evaluation
-| AUC ROC| 0.28 | 
-| FPR at 95% TPR: 1.0 | 
-| AUC PRC: 0.87 | 
-| Precision: 0.91 | 
-| Recall: 1.0 | 
 ## Usage
 
 ```bash
