@@ -13,7 +13,7 @@ This project implements a simple Out-of-Distribution (OOD) detection system usin
 ## OOD Detection
 The goal is to build a OOD Detector ables to produces a score representing how OOD a test sample is.
 
-1. **Data preparation**: CIFAR10 is used as in-distribution dataset, CIFAR100 as out-of-distribution one. In particular, only the classes ["Maple_tree", "Aquarium_fish", "Willow_tree", "Flatfish", "Rose", "Lawn_mower", "Porcupine", "Caterpillar", "Seaweed", "Shrew"] have been considered.
+1. **Data preparation**: CIFAR10 is used as in-distribution dataset, CIFAR100 as out-of-distribution one. 
 
 2. **Models**:
 - CNN: a simple convolutional neural network
@@ -28,10 +28,25 @@ The goal is to build a OOD Detector ables to produces a score representing how O
 
 ## How to distinguish between IN and OOD data?
 In order to distinguish between IN data and OOD data an OOD we can implement the following strategies:
-- Maximum Softmax Probability (MSP) score:
-- Histograms: 
-- ROC curves:
-- Precision-Recall curves:
+- **Maximum Softmax Probability (MSP) score**
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/3d8d739e-8c40-4d74-8cdc-7eda50c4df1c" width="400"/>
+  <img src="https://github.com/user-attachments/assets/4a049ce1-a53c-4ffa-bb68-a163308f795e" width="400"/>
+</p> 
+  
+  
+- **ROC curves**
+
+  
+- **Precision-Recall curves**
+
+- **Metrics summary**
+| Metric              | Value          |
+|---------------------|----------------|
+| AUC                | 0.67396025     |
+| FPR at 95% TPR     | 0.91333333     |
+| AUROC              | 0.67396025     |
+| AUPR               | 0.97271474     |
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/6053b905-342c-4824-a571-7be4f3363ee4" width="400"/>
