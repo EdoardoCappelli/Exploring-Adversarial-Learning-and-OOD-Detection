@@ -13,13 +13,13 @@ This project implements a simple Out-of-Distribution (OOD) detection system usin
 ## OOD Detection
 The goal is to build a OOD Detector ables to produces a score representing how OOD a test sample is.
 
-1. **Data preparation**: CIFAR10 is used as in-distribution dataset, CIFAR100 as out-of-distribution one. 
+### 1. **Data preparation**: CIFAR10 is used as in-distribution dataset, CIFAR100 as out-of-distribution one. 
 
-2. **Models**:
+### 2. **Models**:
 - CNN: a simple convolutional neural network
 - ResNet18 pretrained
 
-3. **Training**:
+### 3. **Training**:
 - CrossEntropyLoss
 - Adam optimizer (lr=0.0001)
 - GradScaler to enabel automatic mixed precision for faster training on CUDA
@@ -28,7 +28,8 @@ The goal is to build a OOD Detector ables to produces a score representing how O
 
 ## How to distinguish between IN and OOD data?
 In order to distinguish between IN data and OOD data an OOD we can implement the following strategies:
-- **Maximum Softmax Probability (MSP) score**
+
+### **Maximum Softmax Probability (MSP) score**
   
 | CNN | RESNET |
 |-----|--------|
@@ -38,7 +39,8 @@ In order to distinguish between IN data and OOD data an OOD we can implement the
 For ID data, the scores tend to be higher, as the model recognizes them and is more confident in its predictions.
 For OOD data, the scores tend to be lower, as the model does not recognize them and is therefore less confident.
 
-- **ROC and Precision-Recall curves**
+### **ROC and Precision-Recall curves**
+To further evaluate the OOD detection performance, **Receiver Operating Characteristic (ROC)** and **Precision-Recall (PR)** curves are plotted. These curves provide insights into how well the model distinguishes between ID and OOD data across different thresholds.
 
 | CNN |
 |-----|
@@ -48,7 +50,9 @@ For OOD data, the scores tend to be lower, as the model does not recognize them 
 |-----|
 | <p align="center"><img src="https://github.com/user-attachments/assets/7636917a-92ac-4a0c-8d05-baed3a642cdc" width="1000"/></p> |
 
-- **Metrics summary**
+### **Performance Metrics Summary**
+
+Here is a summary of the key performance metrics for both models:
   
 | Metric            | CNN   | RESNET |
 |-------------------|-------|--------| 
@@ -59,7 +63,10 @@ For OOD data, the scores tend to be lower, as the model does not recognize them 
 
 
 ## Usage
+To run the OOD detection pipeline, you can use the following comma
 
 ```bash
-python train.py
+python main.py --epochs 50 --model-type cnn --tran
+```
+
 
