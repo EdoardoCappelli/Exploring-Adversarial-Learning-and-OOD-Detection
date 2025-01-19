@@ -13,8 +13,14 @@ This project implements a simple Out-of-Distribution (OOD) detection system usin
 ## OOD Detection
 The goal is to build a OOD Detector ables to produces a score representing how OOD a test sample is.
 
-- Cifar-10 (ID)
-- CIFAR-100 (OOD)
+1. **Data preparation**: CIFAR10 is used as in-distribution dataset, CIFAR100 as out-of-distribution one. In particular, only the classes ["Maple_tree", "Aquarium_fish", "Willow_tree", "Flatfish", "Rose", "Lawn_mower", "Porcupine", "Caterpillar", "Seaweed", "Shrew"] have been considered.
+
+2. **Models**:
+- CNN: a simple convolutional neural network
+- ResNet18 pretrained
+
+3. **Training**: 
+
 
 In order to distinguish between IN data and OOD data I compute a OOD score using the Maximum Softmax Probability (MSP). Then, I evaluate the performance of OOD detection with histograms, ROC curves and Precision-Recall curves.
 <p align="center">
