@@ -19,10 +19,20 @@ The goal is to build a OOD Detector ables to produces a score representing how O
 - CNN: a simple convolutional neural network
 - ResNet18 pretrained
 
-3. **Training**: 
+3. **Training**:
+- CrossEntropyLoss
+- Adam optimizer (lr=0.0001)
+- GradScaler to enabel automatic mixed precision for faster training on CUDA
+- epochs [10, 50]
+- trained models [cnn, resnet]
 
+## How to distinguish between IN and OOD data?
+In order to distinguish between IN data and OOD data an OOD we can implement the following strategies:
+- Maximum Softmax Probability (MSP) score:
+- Histograms: 
+- ROC curves:
+- Precision-Recall curves:
 
-In order to distinguish between IN data and OOD data I compute a OOD score using the Maximum Softmax Probability (MSP). Then, I evaluate the performance of OOD detection with histograms, ROC curves and Precision-Recall curves.
 <p align="center">
   <img src="https://github.com/user-attachments/assets/6053b905-342c-4824-a571-7be4f3363ee4" width="400"/>
   <img src="https://github.com/user-attachments/assets/da1e1975-c11a-4aba-b83b-5e7c01535f13" width="400"/>
