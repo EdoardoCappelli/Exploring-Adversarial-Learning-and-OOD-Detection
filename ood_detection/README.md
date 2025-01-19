@@ -29,53 +29,33 @@ The goal is to build a OOD Detector ables to produces a score representing how O
 ## How to distinguish between IN and OOD data?
 In order to distinguish between IN data and OOD data an OOD we can implement the following strategies:
 - **Maximum Softmax Probability (MSP) score**
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/3d8d739e-8c40-4d74-8cdc-7eda50c4df1c" width="400"/>
-  <img src="https://github.com/user-attachments/assets/4a049ce1-a53c-4ffa-bb68-a163308f795e" width="400"/>
-</p> 
   
-  
-- **ROC curves**
+| CNN | RESNET |
+|-----|--------|
+| <p align="center"><img src="https://github.com/user-attachments/assets/4d4c365b-6c73-47b5-9e21-9551c370ba70" width="400"/></p> | <p align="center"><img src="https://github.com/user-attachments/assets/18ca3d6a-3097-4919-b7a9-68b701bd7ec7" width="400"/></p> |
+| <p align="center"><img src="https://github.com/user-attachments/assets/cc5abbd0-5cf0-4340-adb6-fe969a129a46" width="400"/></p> | <p align="center"><img src="https://github.com/user-attachments/assets/35c5e019-8aa0-4f31-8950-5c5e72cd3f46" width="400"/></p> |
 
-  
-- **Precision-Recall curves**
+For ID data, the scores tend to be higher, as the model recognizes them and is more confident in its predictions.
+For OOD data, the scores tend to be lower, as the model does not recognize them and is therefore less confident.
+
+- **ROC and Precision-Recall curves**
+
+| CNN |
+|-----|
+| <p align="center"><img src="https://github.com/user-attachments/assets/5a73a889-b838-4518-b27e-672d3a54e9d9" width="1000"/></p> |
+
+| RESNET |
+|-----|
+| <p align="center"><img src="https://github.com/user-attachments/assets/7636917a-92ac-4a0c-8d05-baed3a642cdc" width="1000"/></p> |
 
 - **Metrics summary**
-| Metric              | Value          |
-|---------------------|----------------|
-| AUC                | 0.67396025     |
-| FPR at 95% TPR     | 0.91333333     |
-| AUROC              | 0.67396025     |
-| AUPR               | 0.97271474     |
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/6053b905-342c-4824-a571-7be4f3363ee4" width="400"/>
-  <img src="https://github.com/user-attachments/assets/da1e1975-c11a-4aba-b83b-5e7c01535f13" width="400"/>
-</p> 
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/9672fc36-0991-40aa-aee5-b7f59d7c20cd" width="400"/>
-  <img src="https://github.com/user-attachments/assets/82d30cf3-f270-4382-a4ee-a24b0eae0222" width="400"/>
-</p> 
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/4b35f29e-6f4b-42e3-ab12-c0833d378e6f" width="400"/>
-  <img src="https://github.com/user-attachments/assets/c466cc34-9f55-44ab-8421-a2c86cfb2413" width="400"/>
-</p> 
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/5b6cfd12-1dc0-47a0-9539-1ae6130a0b69" width="400"/>
-  <img src="https://github.com/user-attachments/assets/47a57fb1-d33f-458d-bff4-4a004ca53685" width="400"/>
-</p> 
-
-
-### cnn_ep{10}
-| AUROC | 0.635 |
-| AUPR | 0.945 |
-
-### resnet_ep{10}
-| AUROC | 0.73 | 
-| AUPR | 0.96 | 
+  
+| Metric            | CNN   | RESNET |
+|-------------------|-------|--------| 
+| Accuracy on test  | 0.71  | 0.82  |
+| AUC               | 0.67  | 0.75   |
+| FPR at 95% TPR    | 0.91  | 0.84   |
+| AUPR              | 0.97  | 0.98   |
 
 
 ## Usage
