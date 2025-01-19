@@ -1,73 +1,98 @@
-import argparse
 import torch
-import torchvision
-from torchvision.datasets import FakeData
-from torch.utils.data import Subset
-from torchvision import transforms
-from torch import nn
-from torch import optim
-import os
-from utils import evaluate_model, train_epoch
-from models.cnn import CNN 
+import torch.nn as nn
+import torch.optim as optim
+from tqdm import tqdm
 
-if __name__ == "__main__":
-    # Argument parser
-    parser = argparse.ArgumentParser(description="Train a CNN on CIFAR10 with optional OOD dataset")
-    parser.add_argument('--batch_size', type=int, default=256, help='Batch size for training and evaluation')
-    parser.add_argument('--epochs', type=int, default=10, help='Number of training epochs')
-    parser.add_argument('--ood_set', type=str, choices=['fakedata', 'cifar100'], default='fakedata', help='Out-of-distribution dataset')
-    args = parser.parse_args()
-
-    # Data transformation
-    transform = transforms.Compose(
-        [transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))])
-
-    # Settings
-    batch_size = args.batch_size
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    num_workers = 2
-    id_classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
-
-    # CIFAR10 dataset
-    trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-
-    testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
-
-    # OOD dataset selection
-    if args.ood_set == 'fakedata':
-        fakeset = FakeData(size=1000, image_size=(3, 32, 32), transform=transform)
-        fakeloader = torch.utils.data.DataLoader(fakeset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
-
-    if args.ood_set == 'cifar100':
-        ood_classes = ["aquarium", "bycicle", "bottle", "bed", "rocket", "can", "girl", "chair"]
-        cifar100 = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform)
-        selected_indices = [i for i, (_, label) in enumerate(cifar100) if cifar100.classes[label] in ood_classes]
-        fakeset = Subset(cifar100, selected_indices)
-        fakeloader = torch.utils.data.DataLoader(fakeset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
-
-    # Print settings
-    print("==== SETTINGS ====")
-    print(f"Batch size: {args.batch_size}")
-    print(f"Epochs: {args.epochs}")
-    print(f"Device: {device}")
-    print(f"OOD Dataset: {args.ood_set}")
-    print("==================")
-
-    # Initialize model, loss, and optimizer
-    model = CNN().to(device)
-    loss = nn.CrossEntropyLoss()
+def train_model(model, trainloader, epochs, device, lr=0.001, momentum=0.9):
+    """
+    Train the model using CUDA if available.
+    
+    Args:
+        model: The neural network model
+        trainloader: DataLoader for training data
+        epochs: Number of training epochs
+        device: Device to train on (cuda or cpu)
+        lr: Learning rate
+        momentum: Momentum for SGD optimizer
+    """
+    print(f"Training on {device}")
+    model = model.to(device)
+    criterion = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=lr, momentum=momentum)
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
 
-    # Training loop
-    epochs = args.epochs
-    for e in range(epochs):
-        train_epoch(model, trainloader, loss, optimizer, epoch=e, device=device)
-        val_loss, val_acc, val_report = evaluate_model(model, testloader, loss, device=device)
-        print(f'Epoch {e} - Validation Loss: {val_loss:.4f} - Validation Accuracy: {val_acc:.4f}')
+    # Enable automatic mixed precision for faster training on CUDA
+    scaler = torch.amp.GradScaler('cuda') if device.type == 'cuda' else None
+    for epoch in range(epochs):
+        model.train()
+        running_loss = 0.0
+        
+        # Add progress bar for each epoch
+        pbar = tqdm(trainloader, desc=f'Epoch {epoch + 1}/{epochs}')
+        
+        for inputs, labels in pbar:
+            # Move data to appropriate device
+            inputs = inputs.to(device)
+            labels = labels.to(device)
+            
+            # Zero the parameter gradients
+            optimizer.zero_grad()
+            
+            if device.type == 'cuda':
+                # Use automatic mixed precision for faster training
+                with torch.amp.autocast('cuda'):
+                    outputs = model(inputs)
+                    loss = criterion(outputs, labels)
+                
+                # Scale loss and call backward
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
+            else:
+                # Regular training on CPU
+                outputs = model(inputs)
+                loss = criterion(outputs, labels)
+                loss.backward()
+                optimizer.step()
+            
+            running_loss += loss.item()
+            
+            # Update progress bar
+            pbar.set_postfix({'loss': f'{loss.item():.3f}'})
+        
+        epoch_loss = running_loss / len(trainloader)
+        print(f"Epoch {epoch + 1}, Loss: {epoch_loss:.3f}")
+    
+    print("Finished Training")
+    return model
 
-    # Save model
-    os.makedirs('./checkpoints', exist_ok=True)
-    torch.save(model.state_dict(), f"./checkpoints/cifar10_cnn_{args.epochs}.pth")
+def evaluate_model(model, testloader, device):
+    """
+    Evaluate the model using CUDA if available.
+    
+    Args:
+        model: The neural network model
+        testloader: DataLoader for test data
+        device: Device to evaluate on (cuda or cpu)
+    """
+    print(f"\nEvaluating on {device}")
+    model = model.to(device)
+    model.eval()
+    
+    correct = 0
+    total = 0
+    
+    with torch.no_grad():
+        for inputs, labels in tqdm(testloader, desc='Evaluating'):
+            inputs = inputs.to(device)
+            labels = labels.to(device)
+            
+            outputs = model(inputs)
+            _, predicted = torch.max(outputs, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    
+    accuracy = 100 * correct / total
+    print(f"Accuracy on the test set: {accuracy:.2f}%")
+    return accuracy
+
