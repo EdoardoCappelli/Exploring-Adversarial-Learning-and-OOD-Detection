@@ -12,28 +12,35 @@ fgsm
 ├── eval.py         # Model evaluation script
 ├── eval_robust_cnn.py # Evaluate robustness of trained CNN
 ├── fgsm.py         # FGSM attack implementation
+├── results/
+├── checkpoints/    # Trained models weights
 ```
 
 ## Key Components
+### Model, Optimizer, Dataset Setup
+- CrossEntropyLoss as the loss function
+- Adam optimizer with a learning rate of 0.0001
+- CIFAR10 dataset
 
 ### `fgsm.py`
-This script implements the FGSM attack, a white-box adversarial attack designed to perturb input images in the direction of the gradient of the loss function, making the model misclassify the inputs.
+This script implements the FGSM attack, a white-box adversarial attack designed to perturb input images in the direction of the gradient of the loss function, making the model misclassify the inputs. A pre-trained CNN model on CIFAR10 is used for predictions. The main steps are described below:
 
-#### Main Functions
-- **`fgsm_attack`**: Generates adversarial examples by adding perturbations to the input image.
-- **`show_attack`**: Visualizes the original image, adversarial image, and the perturbation applied.
+- Compute the loss using CrossEntropyLoss.
+- Calculate the gradient of the loss with respect to the input image.
+- The image is perturbed by the gradient's sign, scaled by the specified epsilon.
+- The loop continues for a specified number of iterations (max_iter), modifying the image until it misclassifies or exceeds the iterations.
 
-#### Script Highlights
-- The attack iteratively updates the input image based on the sign of the gradient.
-- It uses a pre-trained CNN model for predictions.
-- Supports saving and optionally displaying adversarial examples.
 
 ### `adv_training.py`
-This script facilitates adversarial training, a method to improve model robustness by incorporating adversarial examples during the training process.
+The CNN is trained on both clean and adversarial examples to increase robustness against adversarial attacks. 
 
-### `eval.py`
-Provides tools for evaluating the performance of the model on clean and adversarial samples.
-
+- For each batch, adversarial examples (x_adv) are generated using the Fast Gradient Sign Method (FGSM).
+- Compute the loss, perform backpropagation, and adjust the image slightly in the direction of the gradient's sign.
+- The model is trained on the adversarial image (x_adv), and the loss is computed.
+- The optimizer updates the model's weights based on this adversarial loss.
+- The model is also trained on the original images to maintain performance on clean data.
+- Another round of optimization is performed using the original images.
+  
 ## Running the FGSM Attack
 
 To execute the FGSM attack on CIFAR-10 using a pre-trained CNN model:
@@ -47,35 +54,28 @@ python fgsm.py --pretrained ./models/cnn.pth --epsilon 0.01 --verbose
 - `--epsilon`: Magnitude of the perturbation.
 - `--verbose`: Display visualizations of adversarial examples.
 
-### Example Output
-The script will output the following:
-- Iteration count for successful attacks.
-- Visualization of the original, adversarial, and difference images.
-- Saved adversarial examples in the `results` directory.
-
-
-## Adversarial Training
-To train a model with adversarial examples for improved robustness:
+## Usage
+### Training
 
 ```bash
 python adv_training.py --epochs 20 --batch_size 128
 ```
 
-## Evaluation
-Evaluate the performance of the trained model on adversarial samples:
+### Evaluation
 
 ```bash
 python eval.py --model ./models/cnn.pth
 ```
-
-Test the robustness of the model against adversarial attacks:
+### Testing the robustness of the model against adversarial attacks
 
 ```bash
 python eval_robust_cnn.py --model ./models/cnn.pth --epsilon 0.01
 ```
-### Results
 
-#### CIFAR-10 CNN (cifar10_cnn_30)
+## Results
+
+#### CIFAR-10 CNN 
+Adversarial attacks performed on CIFAR10 using a simple CNN trained for 30 epochs.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/b3298cc7-4fd4-4b8c-af15-a133554f9a2e" width="600"/>
