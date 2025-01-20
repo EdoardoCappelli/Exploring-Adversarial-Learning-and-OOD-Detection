@@ -48,18 +48,15 @@ python grid_search.py --batch_size 256 --ood_set cifar100 --pretrained path_to_p
 - `ood_set`: Specifies the OOD dataset to evaluate. Options are "fakedata" or "cifar100".
 - `pretrained`: The path to the pretrained model.
 
-## Example Output
-
-Running the `test_odin.py` script will output the following metrics:
-- **AUC ROC (ODIN)**: The Area Under the ROC Curve for OOD detection.
-- **FPR at 95% TPR (ODIN)**: The False Positive Rate when the True Positive Rate is 95%.
-- **AUC PRC**: The Area Under the Precision-Recall Curve.
-- **Precision**: The precision at the highest recall.
-- **Recall**: The recall at the highest precision.
-
-Additionally, plots for the ROC and PR curves will be saved in the `./results` directory.
-
 ## Results
+
+AUC ROC (ODIN): 0.5001666666666666
+FPR at 95% TPR (ODIN): 0.9996666666666667
+AUC PRC: 0.8846449726902069
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/7a22abed-9646-4890-9f2c-c3880331822d" width="600"/>
+</p>
 
 
 ## References
