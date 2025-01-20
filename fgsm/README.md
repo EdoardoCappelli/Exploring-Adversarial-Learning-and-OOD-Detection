@@ -89,11 +89,11 @@ Adversarial attacks performed on CIFAR10 using a simple CNN trained for 30 epoch
 
 #### Robust CNN vs Standard CNN
 
-The performance of the attacks and the adversarial training is assessed using specific metrics. The outcomes are presented through the Attack Success Rate (ASR), illustrating how the effectiveness of the attack varies with respect to the epsilon parameter and the maximum number of iterations.
-
 <p align="center">
   <img src="https://github.com/user-attachments/assets/2cb23615-ec7b-47c3-95c1-a94ae956a80e" width="800"/>
 </p>
+
+The performance of the attacks and the adversarial training is assessed using specific metrics. The outcomes are presented through the Attack Success Rate (ASR), illustrating how the effectiveness of the attack varies with respect to the epsilon parameter and the maximum number of iterations.
 
 ---
 
