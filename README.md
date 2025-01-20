@@ -1,6 +1,6 @@
 # Exploring-Adversarial-Learning-and-OOD-Detection
 
-This repository contains three distinct projects releted to OOD detection and adversarial learning.
+This repository contains three distinct projects related to OOD detection and adversarial learning.
 
 ---
 
@@ -25,53 +25,27 @@ python main.py --epochs 50 --model-type cnn
 
 ---
 
-## 2. **Adversarial Attacks**
+## 2. **Fast Gradient Sign Method (FGSM) Attacks**
 
-This project explores the implementation and evaluation of adversarial attack methods on machine learning models. It aims to understand model vulnerabilities and improve their robustness against adversarial inputs.
-
-### Features
-
-- Support for multiple attack algorithms, including FGSM and PGD.
-- Implementation of targeted and untargeted attacks.
-- Visualizations to demonstrate adversarial perturbations.
-- Analysis of model performance under attack.
-
-### Usage
-
-Run the main script to generate adversarial examples and evaluate their impact:
-
-```bash
-python adversarial_attack.py --attack-type pgd --epsilon 0.03
-```
-
----
-
-## 3. **ODIN: Out-of-Distribution Detector**
-
-This project implements the ODIN technique for OOD detection. ODIN uses temperature scaling and input perturbation to improve the separation between in-distribution and out-of-distribution samples.
+This module implements the Fast Gradient Sign Method (FGSM) for generating adversarial examples against neural networks. The implementation includes both single-step and iterative variants of FGSM.
 
 ### Features
 
-- Implementation of temperature scaling and input perturbation.
-- Support for multiple OOD datasets.
-- Detailed performance analysis using metrics like AUC and FPR.
-- Visualization of detection performance.
+- Basic FGSM implementation with configurable epsilon values
+- Iterative FGSM with customizable maximum iterations
+- Support for both robust and standard model evaluation
+- Visualization tools for attack success rates
+
+### Key Parameters
+
+- `epsilon`: Perturbation magnitude (default values: 0.001 to 0.1)
+- `max_iter`: Maximum number of iterations for iterative FGSM (default values: 1 to 50)
+- Attack success rate (ASR) evaluation against both robust and standard models
 
 ### Usage
 
-To run the ODIN method for OOD detection:
+To evaluate FGSM attacks against both robust and standard models:
 
 ```bash
-python odin.py --temperature 1000 --epsilon 0.0014
+python fgsm_evaluation.py --robust-model path/to/robust_model.pth --standard-model path/to/standard_model.pth
 ```
-
----
-
-## General Notes
-
-Each project contains a `README.md` file with detailed instructions, explanations, and usage examples. To get started, navigate to the respective folder and follow the instructions provided.
-
-Feel free to clone the repository and explore the projects:
-
-```bash
-git clone https://github.com/your-repo-name.git
