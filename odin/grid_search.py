@@ -11,9 +11,10 @@ from torchvision.datasets import FakeData
 from torch.utils.data import Subset
 from torchvision import transforms
 import os
-from models.cnn import CNN 
-from utils import load_model
+from utils import load_model, save_model
 from models import get_model
+from train import train_model, evaluate_model 
+from data import get_data_loaders 
 
 def grid_search(model, testloader, fakeloader, temperatures, epsilons, device='cpu'):
     model.eval()
@@ -31,8 +32,8 @@ def grid_search(model, testloader, fakeloader, temperatures, epsilons, device='c
             target = torch.cat((torch.ones_like(scores_test), torch.zeros_like(scores_fake)))
             fpr, tpr, _ = metrics.roc_curve(target.cpu().numpy(), prediction.cpu().numpy())
             auc_score = metrics.auc(fpr, tpr)
+            print(f'Temperature: {temp}, Epsilon: {eps}, AUC: {auc_score}')
             if auc_score > best_auc:
-                print(f'Temperature: {temp}, Epsilon: {eps}, AUC: {auc_score}')
                 best_auc = auc_score
                 best_temp = temp
                 best_eps = eps
@@ -64,13 +65,14 @@ if __name__ == "__main__":
     print(f"\nInitializing {args.model_type.upper()} model...")
     model = get_model(args.model_type).to(device)
     
-    print("\nLoading the pretrained model...")
+    
+    print("\nLoading existing model...")
     try:
         model, checkpoint = load_model(model, args.model_path, device)
     except FileNotFoundError as e:
         print(f"Error: {e}")
         print("Please train the model first using --train flag or provide correct model path")
-        
+    
     transform = transforms.Compose(
         [transforms.ToTensor(),
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))])

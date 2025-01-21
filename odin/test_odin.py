@@ -10,15 +10,19 @@ import argparse
 from models.cnn import CNN 
 import os
 from odin import Odin
+from utils import load_model
+from models import get_model
 
 def parse_args():
     parser = argparse.ArgumentParser(description="OOD Detection Baseline")
-    parser.add_argument("--batch_size", type=int, default=256, help="Batch size for training and evaluation")
+    parser.add_argument("--batch-size", type=int, default=256, help="Batch size for training and evaluation")
     parser.add_argument('--epsilon', type=float, default=0.01, help='perturbation')
     parser.add_argument('--temp', type=float, default=0.01, help='temperature')
-    parser.add_argument("--ood_set", type=str, default="fakedata", choices=["fakedata", "cifar100"],
+    parser.add_argument("--ood-set", type=str, default="fakedata", choices=["fakedata", "cifar100"],
                         help="OOD dataset to evaluate")
-    parser.add_argument("--pretrained", type=str, required=True, help="Path to the pretrained model"),
+    parser.add_argument("--model-path", type=str, required=True, help="Path to the pretrained model"),
+    parser.add_argument('--model-type', type=str, choices=['cnn', 'resnet'],
+                       default='cnn', help='Type of model to use (default: cnn)')
     parser.add_argument("--verbose", action="store_true")
     return parser.parse_args()
 
@@ -26,14 +30,27 @@ if __name__ == "__main__":
     args = parse_args()
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = CNN().to(device)
-    model.load_state_dict(torch.load(args.pretrained, weights_only=True))
-    model.eval()
+    if device.type == 'cuda':
+        print(f"Using GPU: {torch.cuda.get_device_name(0)}")
+        print(f"Memory Allocated: {torch.cuda.memory_allocated(0) / 1024**2:.2f} MB")
+    else:
+        print("Using CPU")
+        
+    print(f"\nInitializing {args.model_type.upper()} model...")
+    model = get_model(args.model_type).to(device)
+    
+    
+    print("\nLoading existing model...")
+    try:
+        model, checkpoint = load_model(model, args.model_path, device)
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        print("Please train the model first using --train flag or provide correct model path")
+    
 
     os.makedirs('./results', exist_ok=True)
-    dir = os.path.splitext(os.path.basename(args.pretrained))[0]
+    dir = os.path.splitext(os.path.basename(args.model_type))[0]
     os.makedirs(f'./results/{dir}', exist_ok=True)
-    
     
     transform = transforms.Compose(
         [transforms.ToTensor(),
