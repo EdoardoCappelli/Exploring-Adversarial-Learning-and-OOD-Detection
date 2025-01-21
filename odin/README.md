@@ -84,8 +84,8 @@ python test_odin.py --model-type cnn --ood-set cifar100 --epsilon 0.01 --temp 1 
 
 ### FRP-TPR and Precision-Recall curves
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/79b4802c-4c1e-46b2-94dd-fac51ff0072a" width="600"/>
-  <img src="https://github.com/user-attachments/assets/9b9675d9-f037-4f8b-a611-fa4491706fe3" width="600"/>
+  <img src="https://github.com/user-attachments/assets/79b4802c-4c1e-46b2-94dd-fac51ff0072a" width="500"/>
+  <img src="https://github.com/user-attachments/assets/9b9675d9-f037-4f8b-a611-fa4491706fe3" width="500"/>
 </p>
 
 
