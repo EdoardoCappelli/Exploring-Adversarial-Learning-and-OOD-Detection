@@ -88,6 +88,14 @@ python test_odin.py --model-type cnn --ood-set cifar100 --epsilon 0.01 --temp 1 
   <img src="https://github.com/user-attachments/assets/9b9675d9-f037-4f8b-a611-fa4491706fe3" width="500"/>
 </p>
 
+## ODIN vs Standard Method
+
+| Method | AUC ROC | FPR at 95% TPR |
+|------|----------|-----------------|
+| ODIN | 0.91     | 0.75            |
+| Standard | 0.67 | 0.91            |
+
+ODIN improves the OOD data detection. The higher AUC ROC means a better capability to separate OOD and ID. A lower FPR indicates fewer false positives at a high true positive rate, demonstrating that ODIN reduces the likelihood of incorrectly classifying OOD samples as in-distribution.
 
 ## References
 
