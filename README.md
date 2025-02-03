@@ -69,19 +69,12 @@ This project implements ODIN, a method for Out-of-Distribution (OOD) detection. 
 ### Usage
 To train the model and evaluate OOD detection using the ODIN method:
 
-#### Training a model (e.g., CNN or ResNet18):
+#### Running ODIN on a Pretrained Model:
 ```bash
-python main.py --epochs 50 --model-type cnn
+python test_odin.py --batch_size 256 --epsilon 0.01 --temp 0.1 --ood_set cifar100 --pretrained path_to_pretrained_model.pth --verbose
 ```
 
-#### Detecting OOD samples using ODIN:
+#### Grid Search for Hyperparameter Optimization
 ```bash
-python odin_detection.py --model path/to/model.pth --temperature 100 --epsilon 0.01 --ood-data
-```
-
-#### Performance Evaluation
-Evaluate the ODIN method by plotting performance metrics such as ROC and Precision-Recall curves, comparing OOD detection accuracy against random sampling methods.
-
-```bash
-python evaluate_odin.py --model path/to/model.pth --ood-dataset cifar100
+python grid_search.py --model-type cnn --batch_size 256 --ood-set cifar100 --model-path checkpoints/cnn_model_ep50 --verbose
 ```
