@@ -49,3 +49,39 @@ To evaluate FGSM attacks against both robust and standard models:
 ```bash
 python fgsm_evaluation.py --robust-model path/to/robust_model.pth --standard-model path/to/standard_model.pth
 ```
+
+## 3. **ODIN - Out-of-Distribution Detection Using Deep Learning**
+
+This project implements ODIN, a method for Out-of-Distribution (OOD) detection. The approach enhances traditional OOD detection by leveraging temperature scaling and input gradient-based perturbation to improve the model's decision boundaries and make it more sensitive to OOD samples.
+
+### Features
+- ODIN method for OOD detection based on a pre-trained CNN or ResNet model.
+- Temperature scaling and gradient-based input perturbation to sharpen the decision boundaries of the model.
+- Compatibility with CIFAR-10 for in-distribution data and CIFAR-100 as the OOD dataset.
+- Performance evaluation using Maximum Softmax Probability (MSP) and ODIN's temperature-scaled softmax score.
+- Integration with existing models (e.g., CNN, ResNet) for OOD detection.
+
+### Key Parameters
+- temperature: Scaling factor applied to model logits to adjust model confidence.
+- epsilon: Magnitude of the perturbation applied to inputs during preprocessing.
+- model: The neural network (e.g., CNN, ResNet) used for classification and OOD detection.
+
+### Usage
+To train the model and evaluate OOD detection using the ODIN method:
+
+#### Training a model (e.g., CNN or ResNet18):
+```bash
+python main.py --epochs 50 --model-type cnn
+```
+
+#### Detecting OOD samples using ODIN:
+```bash
+python odin_detection.py --model path/to/model.pth --temperature 100 --epsilon 0.01 --ood-data
+```
+
+#### Performance Evaluation
+Evaluate the ODIN method by plotting performance metrics such as ROC and Precision-Recall curves, comparing OOD detection accuracy against random sampling methods.
+
+```bash
+python evaluate_odin.py --model path/to/model.pth --ood-dataset cifar100
+```
