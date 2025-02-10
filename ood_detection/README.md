@@ -66,7 +66,7 @@ Here is a summary of the key performance metrics for both models:
 To run the OOD detection pipeline, you can use the following comma
 
 ```bash
-python main.py --epochs 50 --model-type cnn --tran
+python main.py --epochs 50 --model-type cnn --train
 ```
 
 
